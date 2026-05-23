@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Yan Raniere</title>
+  <meta name="description" content="Artigos sobre desenvolvimento web, tecnologia e aprendizados — Yan Raniere.">
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/blog.css">
+</head>
+<body>
+
+<%- include('../partials/nav') %>
+
+<div class="page-content">
+
+  <section class="blog-hero">
+    <div class="container">
+      <span class="section-label" data-i18n="blog_tag">Blog</span>
+      <h2 class="blog-h2" data-i18n="blog_h2">Artigos &amp; Pensamentos</h2>
+      <p class="blog-desc" data-i18n="blog_desc">Reflexões sobre desenvolvimento, tecnologia e o que estou aprendendo.</p>
+    </div>
+  </section>
+
+  <section class="blog-body">
+    <div class="container">
+      <% if (posts.length === 0) { %>
+        <div class="blog-empty">
+          <div class="blog-empty-icon">✍️</div>
+          <p data-i18n="blog_empty">Nenhum post publicado ainda. Em breve!</p>
+        </div>
+      <% } else { %>
+        <div class="blog-grid">
+          <% posts.forEach((post, i) => { %>
+            <article class="blog-card card anim" data-delay="<%= i % 3 %>">
+              <% const postImg = post.cover_image || defaultPostImage; %>
+              <% if (postImg) { %>
+                <img class="blog-card-img" src="<%= postImg %>" alt="<%= post.title %>">
+              <% } %>
+              <div class="blog-card-content">
+                <div class="blog-card-meta">
+                  <time class="blog-date">
+                    <%= new Date(post.published_at || post.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }) %>
+                  </time>
+                  <% if (post.tags && post.tags.length) { %>
+                    <span class="blog-tag-pill"><%= post.tags[0] %></span>
+                  <% } %>
+                </div>
+                <h3 class="blog-card-title"><%= post.title %></h3>
+                <% if (post.excerpt) { %>
+                  <p class="blog-card-excerpt"><%= post.excerpt %></p>
+                <% } %>
+                <% if (post.tags && post.tags.length > 1) { %>
+                  <div class="blog-card-tags">
+                    <% post.tags.slice(1).forEach(tag => { %>
+                      <span class="pill"><%= tag %></span>
+                    <% }) %>
+                  </div>
+                <% } %>
+                <a href="/blog/<%= post.slug %>" class="blog-read-more" data-i18n="blog_read_more">Ler mais →</a>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <%- include('../partials/footer') %>
+</div>
+
+<script src="/script/main.js"></script>
+</body>
+</html>

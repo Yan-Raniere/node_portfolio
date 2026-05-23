@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projetos — Admin</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/admin.css">
+</head>
+<body class="admin-body">
+
+<%- include('../../partials/admin-nav') %>
+
+<main class="admin-main">
+  <div class="admin-page-header">
+    <h1 class="admin-page-title">Projetos do Portfólio</h1>
+    <a href="/admin/projetos/novo" class="btn btn-primary">+ Novo Projeto</a>
+  </div>
+
+  <% if (projects.length === 0) { %>
+    <div class="card admin-empty-card">
+      <p class="admin-empty">Nenhum projeto cadastrado. <a href="/admin/projetos/novo">Adicionar o primeiro →</a></p>
+    </div>
+  <% } else { %>
+    <div class="admin-table-wrap card">
+      <table class="admin-table">
+        <thead>
+          <tr><th>Projeto</th><th>Visível</th><th>Ordem</th><th>URL</th><th>Ações</th></tr>
+        </thead>
+        <tbody>
+          <% projects.forEach(proj => { %>
+            <tr>
+              <td>
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <span style="font-size:24px;"><%= proj.emoji %></span>
+                  <div>
+                    <strong><%= proj.title %></strong>
+                    <div class="admin-sub">
+                      <% (proj.tags || []).forEach(tag => { %>
+                        <span class="pill"><%= tag %></span>
+                      <% }) %>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="admin-badge <%= proj.visible ? 'badge-green' : 'badge-gray' %>">
+                  <%= proj.visible ? 'Visível' : 'Oculto' %>
+                </span>
+              </td>
+              <td><%= proj.display_order %></td>
+              <td>
+                <% if (proj.url) { %>
+                  <a href="<%= proj.url %>" target="_blank" class="admin-link-small">Abrir →</a>
+                <% } else { %>
+                  <span class="admin-sub">—</span>
+                <% } %>
+              </td>
+              <td>
+                <div class="admin-actions">
+                  <a href="/admin/projetos/<%= proj.id %>/editar" class="admin-btn-sm">Editar</a>
+                  <form method="POST" action="/admin/projetos/<%= proj.id %>?_method=DELETE" onsubmit="return confirm('Deletar este projeto?')">
+                    <button type="submit" class="admin-btn-sm danger">Deletar</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</main>
+
+</body>
+</html>

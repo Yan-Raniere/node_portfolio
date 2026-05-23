@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projetos — Yan Raniere</title>
+  <meta name="description" content="Projetos desenvolvidos por Yan Raniere — Full Stack Developer.">
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/projects.css">
+</head>
+<body>
+
+<%- include('./partials/nav') %>
+
+<div class="page-content">
+
+  <section class="proj-hero">
+    <div class="container">
+      <span class="section-label" data-i18n="proj_tag">Projetos</span>
+      <h2 class="proj-h2" data-i18n="proj_h2">Trabalhos que entregaram resultados</h2>
+      <p class="proj-note" data-i18n="proj_note">* Alguns projetos profissionais estão sob NDA.</p>
+    </div>
+  </section>
+
+  <section class="proj-body">
+    <div class="container">
+
+      <div class="nda-card anim">
+        <div class="nda-icon">🔒</div>
+        <div class="nda-content">
+          <h4 data-i18n="proj_nda_title">Projetos Profissionais</h4>
+          <p data-i18n="proj_nda_desc">Desenvolvimento e personalização de plugins, temas e blocos para WordPress e Moodle. Atuação em plataformas educacionais e sites institucionais. Detalhes sob NDA.</p>
+          <div class="nda-tags">
+            <span class="pill">PHP</span><span class="pill">WordPress</span><span class="pill">Moodle</span>
+            <span class="pill">JavaScript</span><span class="pill">MySQL</span>
+            <span class="pill nda-badge" data-i18n="proj_nda_tag">NDA</span>
+          </div>
+        </div>
+      </div>
+
+      <% if (projects.length === 0) { %>
+        <div class="proj-empty">
+          <p data-i18n="proj_empty">Nenhum projeto cadastrado ainda.</p>
+        </div>
+      <% } else { %>
+        <div class="proj-grid">
+          <% projects.forEach((p, i) => { %>
+            <div class="proj-card card anim" data-delay="<%= i % 4 %>">
+              <% const projImg = p.cover_image || defaultProjectImage; %>
+              <% if (projImg) { %>
+                <img class="proj-card-img" src="<%= projImg %>" alt="<%= p.title %>">
+              <% } %>
+              <div class="proj-card-content">
+                <% if (!projImg) { %>
+                  <div class="proj-emoji"><%= p.emoji %></div>
+                <% } %>
+                <div class="proj-info">
+                  <h4 class="proj-title"><%= p.title %></h4>
+                  <p class="proj-desc"><%= p.description %></p>
+                  <div class="proj-tags">
+                    <% (p.tags || []).forEach(tag => { %>
+                      <span class="pill"><%= tag %></span>
+                    <% }) %>
+                  </div>
+                </div>
+                <% if (p.url) { %>
+                  <a href="<%= p.url %>" target="_blank" class="proj-link" data-i18n="proj_view">Ver Projeto →</a>
+                <% } %>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+
+    </div>
+  </section>
+
+  <%- include('./partials/footer') %>
+</div>
+
+<script src="/script/main.js"></script>
+</body>
+</html>

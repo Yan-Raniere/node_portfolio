@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contato — Yan Raniere</title>
+  <meta name="description" content="Entre em contato com Yan Raniere — disponível para projetos freelance e oportunidades.">
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/contact.css">
+</head>
+<body>
+
+<%- include('./partials/nav') %>
+
+<div class="page-content">
+
+  <section class="contact-hero">
+    <div class="container">
+      <span class="section-label" data-i18n="contact_tag">Contato</span>
+      <h2 class="contact-h2" data-i18n="contact_h2">Vamos trabalhar juntos?</h2>
+      <p class="contact-desc" data-i18n="contact_desc">Estou disponível para projetos freelance, oportunidades de emprego e parcerias. Entre em contato e vamos conversar!</p>
+    </div>
+  </section>
+
+  <section class="contact-body">
+    <div class="container">
+
+      <div class="contact-cards-grid">
+        <a href="mailto:yan.dev.marinnho@gmail.com" class="card info-item">
+          <span class="info-icon">✉️</span>
+          <div>
+            <span class="info-label" data-i18n="contact_email_label">E-mail</span>
+            <span class="info-value">yan.dev.marinnho@gmail.com</span>
+          </div>
+        </a>
+
+        <a href="https://wa.me/5531972659606" target="_blank" class="card info-item">
+          <span class="info-icon">📱</span>
+          <div>
+            <span class="info-label" data-i18n="contact_phone_label">Telefone / WhatsApp</span>
+            <span class="info-value">+55 31 97265-9606</span>
+          </div>
+        </a>
+
+        <a href="https://www.linkedin.com/in/yan-raniere-85ba44211/" target="_blank" class="card info-item">
+          <span class="info-icon">💼</span>
+          <div>
+            <span class="info-label" data-i18n="contact_linkedin_label">LinkedIn</span>
+            <span class="info-value">/in/yan-raniere</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/yanraniere" target="_blank" class="card info-item">
+          <span class="info-icon">🐙</span>
+          <div>
+            <span class="info-label" data-i18n="contact_github_label">GitHub</span>
+            <span class="info-value">github.com/yanraniere</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="availability-badge">
+        <span class="avail-dot"></span>
+        Disponível para novos projetos
+      </div>
+
+    </div>
+  </section>
+
+  <%- include('./partials/footer') %>
+</div>
+
+<script src="/script/main.js"></script>
+</body>
+</html>

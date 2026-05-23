@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= project ? 'Editar Projeto' : 'Novo Projeto' %> — Admin</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/admin.css">
+</head>
+<body class="admin-body">
+
+<%- include('../../partials/admin-nav') %>
+
+<main class="admin-main">
+  <div class="admin-page-header">
+    <h1 class="admin-page-title"><%= project ? 'Editar Projeto' : 'Novo Projeto' %></h1>
+    <a href="/admin/projetos" class="admin-btn-sm">← Voltar</a>
+  </div>
+
+  <% if (error) { %>
+    <div class="admin-alert admin-alert-error"><%= error %></div>
+  <% } %>
+
+  <form method="POST"
+        action="<%= project ? `/admin/projetos/${project.id}?_method=PUT` : '/admin/projetos' %>"
+        enctype="multipart/form-data">
+
+    <% if (project && project.cover_image) { %>
+      <input type="hidden" name="cover_image_keep" value="<%= project.cover_image %>">
+    <% } %>
+
+    <div class="admin-form-grid">
+      <div class="admin-form-main">
+        <div class="card admin-form-card">
+          <div class="form-field">
+            <label>Título *</label>
+            <input type="text" name="title" value="<%= project ? project.title : '' %>" required placeholder="Nome do projeto">
+          </div>
+
+          <div class="form-field">
+            <label>Imagem do Projeto</label>
+            <div class="img-upload-zone" id="uploadZone" onclick="document.getElementById('coverFileInput').click()">
+              <% if (project && project.cover_image) { %>
+                <img id="imgPreview" src="<%= project.cover_image %>" alt="Preview">
+              <% } else { %>
+                <div id="uploadPlaceholder" class="upload-placeholder">
+                  <span class="upload-icon">🖼️</span>
+                  <span>Clique para escolher uma imagem</span>
+                  <small>JPG, PNG, WebP — máx. 5MB</small>
+                </div>
+                <img id="imgPreview" src="" alt="Preview" style="display:none;">
+              <% } %>
+            </div>
+            <input type="file" id="coverFileInput" name="cover_file" accept="image/*" style="display:none">
+            <% if (project && project.cover_image) { %>
+              <button type="button" class="admin-btn-sm danger" style="margin-top:6px;align-self:flex-start;" onclick="removeImage()">Remover imagem</button>
+            <% } %>
+          </div>
+
+          <div class="form-field">
+            <label>Descrição</label>
+            <textarea name="description" rows="4" placeholder="Descreva o projeto brevemente"><%= project ? project.description : '' %></textarea>
+          </div>
+
+          <div class="form-field">
+            <label>URL do Projeto</label>
+            <input type="url" name="url" value="<%= project ? (project.url || '') : '' %>" placeholder="https://...">
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-form-side">
+        <div class="card admin-form-card">
+          <h3 class="admin-form-section-title">Configurações</h3>
+
+          <div class="admin-toggle-row">
+            <label class="admin-toggle-label">
+              <input type="checkbox" name="visible" <%= !project || project.visible ? 'checked' : '' %>>
+              <span>Visível no portfólio</span>
+            </label>
+          </div>
+
+          <div class="form-field" style="margin-top:16px;">
+            <label>Emoji</label>
+            <input type="text" name="emoji" value="<%= project ? project.emoji : '🚀' %>" placeholder="🚀" maxlength="4">
+          </div>
+
+          <div class="form-field">
+            <label>Ordem de exibição</label>
+            <input type="number" name="display_order" value="<%= project ? project.display_order : 0 %>" min="0">
+          </div>
+
+          <div class="form-field">
+            <label>Tags</label>
+            <input type="text" name="tags" value="<%= project && project.tags ? project.tags.join(', ') : '' %>" placeholder="HTML, CSS, JavaScript">
+            <span class="admin-hint">Separe com vírgulas</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">
+            <%= project ? 'Salvar alterações' : 'Criar projeto' %>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</main>
+
+<script>
+  document.getElementById('coverFileInput').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+      document.getElementById('uploadZone').innerHTML =
+        `<img id="imgPreview" src="${ev.target.result}" alt="Preview">`;
+      const keepInput = document.querySelector('input[name="cover_image_keep"]');
+      if (keepInput) keepInput.remove();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function removeImage() {
+    document.getElementById('uploadZone').innerHTML = `
+      <div id="uploadPlaceholder" class="upload-placeholder">
+        <span class="upload-icon">🖼️</span>
+        <span>Clique para escolher uma imagem</span>
+        <small>JPG, PNG, WebP — máx. 5MB</small>
+      </div>
+      <img id="imgPreview" src="" alt="Preview" style="display:none;">`;
+    document.getElementById('coverFileInput').value = '';
+    const keepInput = document.querySelector('input[name="cover_image_keep"]');
+    if (keepInput) keepInput.remove();
+  }
+</script>
+
+</body>
+</html>

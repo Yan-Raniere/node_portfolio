@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Admin</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/admin.css">
+</head>
+<body class="admin-body">
+
+<%- include('../partials/admin-nav') %>
+
+<main class="admin-main">
+  <div class="admin-page-header">
+    <h1 class="admin-page-title">Dashboard</h1>
+  </div>
+
+  <div class="admin-stats">
+    <div class="admin-stat-card card">
+      <span class="admin-stat-num accent"><%= publishedPosts %></span>
+      <span class="admin-stat-label">Posts Publicados</span>
+    </div>
+    <div class="admin-stat-card card">
+      <span class="admin-stat-num accent"><%= totalPosts %></span>
+      <span class="admin-stat-label">Total de Posts</span>
+    </div>
+    <div class="admin-stat-card card">
+      <span class="admin-stat-num accent"><%= totalProjects %></span>
+      <span class="admin-stat-label">Projetos</span>
+    </div>
+  </div>
+
+  <div class="admin-section">
+    <div class="admin-section-header">
+      <h2 class="admin-section-title">Posts Recentes</h2>
+      <a href="/admin/posts/novo" class="btn btn-primary">+ Novo Post</a>
+    </div>
+
+    <% if (recentPosts.length === 0) { %>
+      <p class="admin-empty">Nenhum post ainda. <a href="/admin/posts/novo">Criar o primeiro</a></p>
+    <% } else { %>
+      <div class="admin-table-wrap card">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Título</th><th>Status</th><th>Data</th><th>Ações</th></tr>
+          </thead>
+          <tbody>
+            <% recentPosts.forEach(post => { %>
+              <tr>
+                <td><strong><%= post.title %></strong></td>
+                <td>
+                  <span class="admin-badge <%= post.published ? 'badge-green' : 'badge-gray' %>">
+                    <%= post.published ? 'Publicado' : 'Rascunho' %>
+                  </span>
+                </td>
+                <td class="admin-date"><%= new Date(post.created_at).toLocaleDateString('pt-BR') %></td>
+                <td>
+                  <div class="admin-actions">
+                    <a href="/admin/posts/<%= post.id %>/editar" class="admin-btn-sm">Editar</a>
+                    <form method="POST" action="/admin/posts/<%= post.id %>?_method=DELETE" onsubmit="return confirm('Deletar este post?')">
+                      <button type="submit" class="admin-btn-sm danger">Deletar</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </div>
+
+  <div class="admin-quick-actions">
+    <a href="/admin/posts" class="card admin-action-card">
+      <span class="admin-action-icon">📝</span>
+      <span>Gerenciar Posts</span>
+    </a>
+    <a href="/admin/projetos" class="card admin-action-card">
+      <span class="admin-action-icon">🚀</span>
+      <span>Gerenciar Projetos</span>
+    </a>
+    <a href="/" target="_blank" class="card admin-action-card">
+      <span class="admin-action-icon">👁️</span>
+      <span>Ver Site</span>
+    </a>
+  </div>
+</main>
+
+</body>
+</html>

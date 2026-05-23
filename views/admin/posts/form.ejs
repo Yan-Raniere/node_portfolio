@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= post ? 'Editar Post' : 'Novo Post' %> — Admin</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/admin.css">
+  <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+</head>
+<body class="admin-body">
+
+<%- include('../../partials/admin-nav') %>
+
+<main class="admin-main">
+  <div class="admin-page-header">
+    <h1 class="admin-page-title"><%= post ? 'Editar Post' : 'Novo Post' %></h1>
+    <a href="/admin/posts" class="admin-btn-sm">← Voltar</a>
+  </div>
+
+  <% if (error) { %>
+    <div class="admin-alert admin-alert-error"><%= error %></div>
+  <% } %>
+
+  <form method="POST"
+        action="<%= post ? `/admin/posts/${post.id}?_method=PUT` : '/admin/posts' %>"
+        enctype="multipart/form-data">
+
+    <% if (post && post.cover_image) { %>
+      <input type="hidden" name="cover_image_keep" value="<%= post.cover_image %>">
+    <% } %>
+
+    <div class="admin-form-grid">
+      <div class="admin-form-main">
+
+        <div class="card admin-form-card">
+          <div class="form-field">
+            <label>Título *</label>
+            <input type="text" name="title" value="<%= post ? post.title : '' %>" required placeholder="Título do post">
+          </div>
+
+          <div class="form-field">
+            <label>Imagem de Capa</label>
+            <div class="img-upload-zone" id="uploadZone" onclick="document.getElementById('coverFileInput').click()">
+              <% if (post && post.cover_image) { %>
+                <img id="imgPreview" src="<%= post.cover_image %>" alt="Preview">
+              <% } else { %>
+                <div id="uploadPlaceholder" class="upload-placeholder">
+                  <span class="upload-icon">🖼️</span>
+                  <span>Clique para escolher uma imagem</span>
+                  <small>JPG, PNG, WebP — máx. 5MB</small>
+                </div>
+                <img id="imgPreview" src="" alt="Preview" style="display:none;">
+              <% } %>
+            </div>
+            <input type="file" id="coverFileInput" name="cover_file" accept="image/*" style="display:none">
+            <% if (post && post.cover_image) { %>
+              <button type="button" class="admin-btn-sm danger" style="margin-top:6px;align-self:flex-start;" onclick="removeImage()">Remover imagem</button>
+            <% } %>
+          </div>
+
+          <div class="form-field">
+            <label>Resumo (excerpt)</label>
+            <textarea name="excerpt" rows="2" placeholder="Breve descrição para a listagem do blog"><%= post ? post.excerpt : '' %></textarea>
+          </div>
+
+          <div class="form-field">
+            <label>Conteúdo * <span class="admin-hint">(Markdown)</span></label>
+            <textarea id="content" name="content"><%= post ? post.content : '' %></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="admin-form-side">
+
+        <div class="card admin-form-card">
+          <h3 class="admin-form-section-title">Publicação</h3>
+          <div class="admin-toggle-row">
+            <label class="admin-toggle-label">
+              <input type="checkbox" name="published" <%= post && post.published ? 'checked' : '' %>>
+              <span>Publicar agora</span>
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+            <%= post ? 'Salvar alterações' : 'Criar post' %>
+          </button>
+        </div>
+
+        <div class="card admin-form-card">
+          <h3 class="admin-form-section-title">Tags</h3>
+          <div class="form-field">
+            <input type="text" name="tags" value="<%= post && post.tags ? post.tags.join(', ') : '' %>" placeholder="Node.js, JavaScript, Web">
+            <span class="admin-hint">Separe com vírgulas</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </form>
+</main>
+
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<script>
+  new EasyMDE({
+    element: document.getElementById('content'),
+    spellChecker: false,
+    autosave: { enabled: true, uniqueId: 'post-<%= post ? post.id : "new" %>' },
+    toolbar: ['bold','italic','heading','|','quote','unordered-list','ordered-list','|','link','image','|','preview','side-by-side','fullscreen','|','guide'],
+  });
+
+  document.getElementById('coverFileInput').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+      const zone = document.getElementById('uploadZone');
+      zone.innerHTML = `<img id="imgPreview" src="${ev.target.result}" alt="Preview">`;
+      // Remove "manter imagem atual" ao trocar
+      const keepInput = document.querySelector('input[name="cover_image_keep"]');
+      if (keepInput) keepInput.remove();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function removeImage() {
+    const zone = document.getElementById('uploadZone');
+    zone.innerHTML = `
+      <div id="uploadPlaceholder" class="upload-placeholder">
+        <span class="upload-icon">🖼️</span>
+        <span>Clique para escolher uma imagem</span>
+        <small>JPG, PNG, WebP — máx. 5MB</small>
+      </div>
+      <img id="imgPreview" src="" alt="Preview" style="display:none;">`;
+    document.getElementById('coverFileInput').value = '';
+    const keepInput = document.querySelector('input[name="cover_image_keep"]');
+    if (keepInput) keepInput.remove();
+  }
+</script>
+</body>
+</html>

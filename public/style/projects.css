@@ -1,0 +1,139 @@
+/* PROJECTS PAGE */
+
+.proj-hero { padding: 80px 0 40px; }
+
+.proj-h2 {
+  font-size: clamp(28px, 4vw, 52px);
+  margin-top: 12px;
+  max-width: 600px;
+}
+
+.proj-note {
+  font-size: 13px;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.proj-body { padding-bottom: 40px; }
+
+.nda-card {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  background: linear-gradient(135deg, var(--orange-dim), transparent);
+  border: 1px solid rgba(249,115,22,.25);
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 40px;
+}
+
+.nda-icon { font-size: 36px; flex-shrink: 0; }
+
+.nda-content h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.nda-content p {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+
+.nda-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.nda-badge {
+  background: var(--orange) !important;
+  color: white !important;
+  border-color: var(--orange) !important;
+}
+
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.proj-card {
+  display: flex;
+  flex-direction: column;
+  transition: transform .25s, box-shadow .25s;
+  overflow: hidden;
+  padding: 0 !important;
+}
+
+.proj-card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+}
+
+.proj-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 22px 24px 24px;
+  flex: 1;
+}
+
+.proj-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(249,115,22,.12);
+  border-color: rgba(249,115,22,.2);
+}
+
+.proj-emoji {
+  font-size: 36px;
+  width: 64px; height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg2);
+  border-radius: 16px;
+}
+
+.proj-info { flex: 1; }
+
+.proj-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.proj-desc {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.proj-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--orange);
+  transition: gap .2s;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.proj-link:hover { gap: 8px; }
+
+.proj-empty {
+  text-align: center;
+  padding: 60px 0;
+  color: var(--text3);
+  font-size: 16px;
+}
+
+@media(max-width: 560px) {
+  .nda-card { flex-direction: column; }
+}

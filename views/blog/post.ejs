@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= post.title %> — Yan Raniere</title>
+  <meta name="description" content="<%= post.excerpt || post.title %>">
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/blog.css">
+</head>
+<body>
+
+<%- include('../partials/nav') %>
+
+<div class="page-content">
+
+  <article class="post-wrap">
+    <div class="container post-container">
+
+      <a href="/blog" class="post-back">← Voltar ao Blog</a>
+
+      <% if (post.cover_image) { %>
+        <img class="post-cover" src="<%= post.cover_image %>" alt="<%= post.title %>">
+      <% } %>
+
+      <header class="post-header">
+        <div class="post-meta">
+          <time class="blog-date">
+            <%= new Date(post.published_at || post.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }) %>
+          </time>
+          <% if (post.tags && post.tags.length) { %>
+            <div class="post-tags">
+              <% post.tags.forEach(tag => { %>
+                <span class="pill"><%= tag %></span>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+        <h1 class="post-title"><%= post.title %></h1>
+        <% if (post.excerpt) { %>
+          <p class="post-excerpt"><%= post.excerpt %></p>
+        <% } %>
+      </header>
+
+      <div class="post-content">
+        <%- post.html %>
+      </div>
+
+      <footer class="post-footer">
+        <a href="/blog" class="btn btn-outline">← Mais artigos</a>
+      </footer>
+
+    </div>
+  </article>
+
+  <%- include('../partials/footer') %>
+</div>
+
+<script src="/script/main.js"></script>
+</body>
+</html>
