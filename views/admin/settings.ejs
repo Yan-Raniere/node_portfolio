@@ -37,11 +37,12 @@
       <form method="POST" action="/admin/configuracoes/imagens" enctype="multipart/form-data">
         <div class="form-field">
           <label>Imagem padrão — Posts</label>
+          <input type="hidden" name="remove_default_post_image" id="removePost" value="0">
           <div class="img-upload-zone" id="zonePost" onclick="document.getElementById('inputPost').click()">
             <% if (defaultPostImage) { %>
               <img id="previewPost" src="<%= defaultPostImage %>" alt="Padrão posts">
             <% } else { %>
-              <div class="upload-placeholder">
+              <div id="placeholderPost" class="upload-placeholder">
                 <span class="upload-icon">📝</span>
                 <span>Clique para escolher</span>
                 <small>JPG, PNG, WebP — máx. 5MB</small>
@@ -49,15 +50,19 @@
             <% } %>
           </div>
           <input type="file" id="inputPost" name="default_post_image" accept="image/*" style="display:none">
+          <% if (defaultPostImage) { %>
+            <button type="button" class="admin-btn-sm danger" style="margin-top:6px;align-self:flex-start;" onclick="removeDefault('Post')">Remover imagem</button>
+          <% } %>
         </div>
 
         <div class="form-field">
           <label>Imagem padrão — Projetos</label>
+          <input type="hidden" name="remove_default_project_image" id="removeProj" value="0">
           <div class="img-upload-zone" id="zoneProj" onclick="document.getElementById('inputProj').click()">
             <% if (defaultProjectImage) { %>
               <img id="previewProj" src="<%= defaultProjectImage %>" alt="Padrão projetos">
             <% } else { %>
-              <div class="upload-placeholder">
+              <div id="placeholderProj" class="upload-placeholder">
                 <span class="upload-icon">🚀</span>
                 <span>Clique para escolher</span>
                 <small>JPG, PNG, WebP — máx. 5MB</small>
@@ -65,6 +70,9 @@
             <% } %>
           </div>
           <input type="file" id="inputProj" name="default_project_image" accept="image/*" style="display:none">
+          <% if (defaultProjectImage) { %>
+            <button type="button" class="admin-btn-sm danger" style="margin-top:6px;align-self:flex-start;" onclick="removeDefault('Proj')">Remover imagem</button>
+          <% } %>
         </div>
 
         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
@@ -112,20 +120,32 @@
 </main>
 
 <script>
-  function bindPreview(inputId, zoneId) {
+  const placeholders = {
+    Post: `<div class="upload-placeholder"><span class="upload-icon">📝</span><span>Clique para escolher</span><small>JPG, PNG, WebP — máx. 5MB</small></div>`,
+    Proj: `<div class="upload-placeholder"><span class="upload-icon">🚀</span><span>Clique para escolher</span><small>JPG, PNG, WebP — máx. 5MB</small></div>`,
+  };
+
+  function bindPreview(suffix, inputId, zoneId) {
     document.getElementById(inputId).addEventListener('change', function (e) {
       const file = e.target.files[0];
       if (!file) return;
+      document.getElementById('remove' + suffix).value = '0';
       const reader = new FileReader();
       reader.onload = ev => {
-        document.getElementById(zoneId).innerHTML =
-          `<img src="${ev.target.result}" alt="Preview">`;
+        document.getElementById(zoneId).innerHTML = `<img src="${ev.target.result}" alt="Preview">`;
       };
       reader.readAsDataURL(file);
     });
   }
-  bindPreview('inputPost', 'zonePost');
-  bindPreview('inputProj', 'zoneProj');
+
+  function removeDefault(suffix) {
+    document.getElementById('remove' + suffix).value = '1';
+    document.getElementById('input' + suffix).value = '';
+    document.getElementById('zone' + suffix).innerHTML = placeholders[suffix];
+  }
+
+  bindPreview('Post', 'inputPost', 'zonePost');
+  bindPreview('Proj', 'inputProj', 'zoneProj');
 </script>
 
 </body>

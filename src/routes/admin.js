@@ -270,6 +270,11 @@ router.post('/configuracoes/imagens', requireAdmin, upload.fields([
   const files = req.files || {};
   let uploaded = 0;
 
+  const removeFlags = {
+    default_post_image:    req.body.remove_default_post_image    === '1',
+    default_project_image: req.body.remove_default_project_image === '1',
+  };
+
   for (const key of ['default_post_image', 'default_project_image']) {
     if (files[key] && files[key][0]) {
       try {
@@ -288,6 +293,9 @@ router.post('/configuracoes/imagens', requireAdmin, upload.fields([
           defaultProjectImage: defaults.default_project_image || null,
         });
       }
+    } else if (removeFlags[key]) {
+      await db.query('DELETE FROM settings WHERE key = $1', [key]);
+      uploaded++;
     }
   }
 
